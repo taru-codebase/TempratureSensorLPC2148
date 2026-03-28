@@ -51,7 +51,7 @@ Hardware Components
 •Arduino IDE
 
 
-# EXPECTED RESULTS 
+# EXPECTED RESULTS 📜
 Upon successful completion and testing of the project, the system will demonstrate the following functional outcomes:
 
 •Successful Initialization: When powered on, the Arduino will initialize, the temperature sensor will provide stable readings, and the SIM900A module will successfully register with the 2G cellular network.
