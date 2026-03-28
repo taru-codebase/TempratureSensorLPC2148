@@ -1,0 +1,98 @@
+#include <lpc214x.h>
+#include <stdio.h>
+
+// Define a threshold for fault detection. An ADC value of 1023 is max.
+// We check for anything very close to the maximum.
+#define SENSOR_FAULT_THRESHOLD 1000
+
+// Function Prototypes
+void ADC0_Init(void);
+unsigned int ADC0_Read(void);
+void delay_ms(unsigned int ms);
+
+// Placeholders for your display functions (e.g., UART or LCD)
+// void Display_Init(void);
+// void Display_String(char *str);
+
+
+int main(void) {
+    unsigned int adc_value;
+    float temperature;
+    
+    // An array to hold the temperature string for display
+    char display_buffer[30]; 
+
+    // Initialize the ADC
+    ADC0_Init();
+
+    // Initialize your display medium (e.g., UART or LCD)
+    // Display_Init(); 
+
+    while (1) {
+        // Read the 10-bit digital value from the ADC
+        adc_value = ADC0_Read();
+
+        // Check if the ADC value exceeds our fault threshold
+        if (adc_value > SENSOR_FAULT_THRESHOLD) {
+            // This indicates the sensor is likely disconnected due to the pull-up resistor.
+            // Send the error message to your display.
+            // sprintf(display_buffer, "No TEMP Detected\n");
+            // Display_String(display_buffer);
+        }
+        else {
+            // Sensor is detected, proceed with normal calculation.
+            // Temperature = adc_value * (330.0 / 1023.0);
+            temperature = (float)adc_value * 0.32258;
+
+            // Send the calculated temperature to your display.
+            // sprintf(display_buffer, "Temperature: %.2f C\n", temperature);
+            // Display_String(display_buffer);
+        }
+
+        // A simple delay before the next reading
+        delay_ms(1000); // Check status every 1 second
+    }
+    // return 0; // Unreachable
+}
+
+
+/**
+ * @brief Initializes ADC0 for reading from channel 1 (AD0.1).
+ */
+void ADC0_Init(void) {
+    // Configure Pin P0.28 as AD0.1
+    PINSEL1 &= 0xFCFFFFFF; // Clear bits 25 and 24
+    PINSEL1 |= 0x01000000; // Set bit 24 to 1 (01)
+
+    // Configure the ADC0 Control Register (AD0CR)
+    AD0CR = (1 << 1)      |  // SEL = 0x02: Select channel 1 (AD0.1)
+            (14 << 8)     |  // CLKDIV: PCLK/15 = 4MHz (assuming 60MHz PCLK)
+            (0 << 16)     |  // BURST = 0: Software-controlled conversions
+            (1 << 21);       // PDN = 1: Power up the ADC
+}
+
+
+/**
+ * @brief Reads a 10-bit value from the configured ADC channel.
+ * @return The 10-bit digital result (0-1023).
+ */
+unsigned int ADC0_Read(void) {
+    unsigned int adc_data;
+    AD0CR |= (1 << 24); // Start the ADC conversion
+    while (!(AD0GDR & (1U << 31))); // Wait for the conversion to complete
+    AD0CR &= ~(1 << 24); // Stop the conversion
+    adc_data = (AD0GDR >> 6) & 0x3FF; // Extract 10-bit result
+    return adc_data;
+}
+
+
+/**
+ * @brief Creates a simple software delay.
+ * @param ms Delay time in milliseconds.
+ */
+void delay_ms(unsigned int ms) {
+    unsigned int i, j;
+    for (i = 0; i < ms; i++) {
+        for (j = 0; j < 12000; j++); // Calibrated for approx. 1ms at 60MHz
+    }
+}
