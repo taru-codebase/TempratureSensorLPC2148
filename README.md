@@ -1,4 +1,4 @@
-# OBJECTIVE💡
+# OBJECTIVE
 
 
 The primary objective of this project is to design, develop, and implement a low-cost, reliable, and real-time temperature monitoring and alert system using an Arduino microcontroller and a SIM900A GSM module.
@@ -15,7 +15,7 @@ To automatically trigger and send an SMS alert to a pre-programmed mobile number
 To test and validate the complete system for reliability, accuracy, and timely alert transmission.
 
 
-# METHODOLOGY💻
+# METHODOLOGY
 
 
 
@@ -33,7 +33,7 @@ Third, the software will be developed using the Arduino IDE. The code will be wr
 4.Listen for incoming SMS messages and reply with the current temperature upon receiving a "STATUS" command.
 Finally, the integrated system will be tested to ensure sensor accuracy and reliable SMS communication before deployment.
 
-# COMPONENTS USED🔨
+# COMPONENTS USED
 Hardware Components
 
 •Arduino UNO
@@ -51,7 +51,7 @@ Hardware Components
 •Arduino IDE
 
 
-# EXPECTED RESULTS 📜
+# EXPECTED RESULTS 
 Upon successful completion and testing of the project, the system will demonstrate the following functional outcomes:
 
 •Successful Initialization: When powered on, the Arduino will initialize, the temperature sensor will provide stable readings, and the SIM900A module will successfully register with the 2G cellular network.
